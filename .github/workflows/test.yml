@@ -1,11 +1,29 @@
-name: Test Automation
-
-on:
-  workflow_dispatch:
-
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Say hello
-        run: echo "Automation is working 🎉"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Pick first video
+        id: pick
+        run: |
+          echo "Looking for videos..."
+          ls videos || true
+
+          VIDEO=$(ls videos/*.mp4 2>/dev/null | head -n 1)
+
+          if [ -z "$VIDEO" ]; then
+            echo "No videos found. Exiting safely."
+            exit 0
+          fi
+
+          echo "VIDEO=$VIDEO" >> $GITHUB_ENV
+          echo "Selected video: $VIDEO"
+
+      - name: Move video to uploaded
+        run: |
+          mkdir -p videos/uploaded
+          mv "$VIDEO" videos/uploaded/
+          echo "Moved $VIDEO to videos/uploaded/"
+
