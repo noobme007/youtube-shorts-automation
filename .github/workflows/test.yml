@@ -6,7 +6,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Pick first video
-        id: pick
         run: |
           echo "Looking for videos..."
           ls videos || true
@@ -26,4 +25,5 @@ jobs:
           mkdir -p videos/uploaded
           mv "$VIDEO" videos/uploaded/
           echo "Moved $VIDEO to videos/uploaded/"
+
 
